@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  message-hub-adapter:
+    image: registry-cn-local.subsidia.org/message-hub/message-hub-template-go
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - GIN_MODE=release
+      - MESSAGE_HUB_TEMPLATE_SERVER_ADDRESS=http://message-hub-template-go:3006/api/template/v1
+      - LOG_DIR=/tmp/
+    networks:
+      backend:
+        aliases:
+          - message-hub-template-go
+    ports:
+      - "3006:3006"
+
+    volumes:
+      - :/tmp/
+
+networks:
+  backend:
+    external:
+      name: messagehub-backend
